@@ -13,10 +13,11 @@ display.setDefault("background", 50/255, 155/255, 200/255)
 
 -- create my local variable
 local verticesTriangle = {-25,300, 100,0, 200,100, }
-local verticesOctagon  = {-100,100, 100,100, 50,200, -50,200, 100,-100, -100,-100, -200,-50, 50,-200}
+local verticesHexagon = {-150,150, 150,150, 200,-50, 0,-250, -200,-50, }
+local verticesDiamond = {100,0, 0,125, -100,0, 0,-125, }
 local triangle = display.newPolygon( 500, 200, verticesTriangle )
-local octagon = display.newPolygon( 1111, 55, verticesOctagon )
-
+local hexagon = display.newPolygon( 800, 400, verticesHexagon )
+local diamond = display.newPolygon( 200,400, verticesDiamond )
 
 -- set the width of traingle border
 triangle.strokeWidth = 20
@@ -27,12 +28,20 @@ triangle:setFillColor(0.7, 0.1, 0.3)
 -- set the colour of the triangles border
 triangle:setStrokeColor(4, 0, 7)
 
--- set the width of octagon
-octagon.strokeWidth = 20
+-- set the width of hexagons border
+hexagon.strokeWidth = 20
 
--- set the colour of the triangle
-octagon:setFillColor(0.7, 0.1, 0.3)
+-- set the colour of the hexagon
+hexagon:setFillColor(0.3, 0.1, 0.8)
 
--- set the colour of the triangles border
-octagon:setStrokeColor(5, 2, 8)
+-- set the colour of the hexagons border
+hexagon:setStrokeColor(9, 2, 4)
 
+-- set the width of diamond border
+diamond.strokeWidth = 20
+
+-- set the colour of the diamond
+diamond:setFillColor(0.1, 0.5, 0.3)
+
+-- set the colour of the diamonds border
+diamond:setStrokeColor(0, 5, 5)
