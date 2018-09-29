@@ -18,6 +18,9 @@ local verticesDiamond = {100,0, 0,125, -100,0, 0,-125, }
 local triangle = display.newPolygon( 500, 200, verticesTriangle )
 local hexagon = display.newPolygon( 800, 400, verticesHexagon )
 local diamond = display.newPolygon( 200,400, verticesDiamond )
+local textObjectTri
+local textObjectHex
+local textObjectDiamond
 
 -- set the width of traingle border
 triangle.strokeWidth = 20
@@ -45,3 +48,13 @@ diamond:setFillColor(0.1, 0.5, 0.3)
 
 -- set the colour of the diamonds border
 diamond:setStrokeColor(0, 5, 5)
+
+-- display text on the screen saying shapes names
+textObjectTri = display.newText( "Triangle", 420, 400, nil, 50)
+textObjectHex = display.newText( "Hexagon", 800, 650, nil, 50)
+textObjectDiamond = display.newText( "Diamond", 200, 600, nil, 50)
+
+--set the colour of the text
+textObjectTri:setTextColor(200/255, 50/255, 80/255)
+textObjectHex:setTextColor(50/255, 70/255, 150/255)
+textObjectDiamond:setTextColor(45/255, 200/255, 100/255)
