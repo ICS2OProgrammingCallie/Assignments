@@ -87,7 +87,7 @@ local gradient = {
 
 compass:setFillColor(gradient)
 
--- create my local varibales
+-- create my local variables
 local areaText
 local baseOfTriangle = 427
 local heightOfTriangle = 516
@@ -98,7 +98,7 @@ local textSize = 30
 areaOfTriangle = baseOfTriangle * heightOfTriangle / 2
 
 -- write the area on the screen
-areaText = display.newText("The area of this traingle with a base of \n" ..
+areaText = display.newText("The area of this triangle with a base of \n" ..
 	baseOfTriangle .. " and a height of " .. heightOfTriangle .. " is " ..
 	areaOfTriangle .. " pixel².", 0, 0, Arial, textSize)
 
