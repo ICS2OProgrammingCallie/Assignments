@@ -66,7 +66,6 @@ textObjectE = display.newText( "East", 850, 500, nil, 50)
 textObjectS = display.newText( "South", 600, 720, nil, 50)
 textObjectW = display.newText( "West", 340, 500, nil, 50)
 
-
 -- set the colour of the text
 textObjectTri:setTextColor(200/255, 50/255, 80/255)
 textObjectHex:setTextColor(50/255, 70/255, 150/255)
