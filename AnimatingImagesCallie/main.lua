@@ -27,27 +27,9 @@ unicorn.x = 0
 earthPony.y = display.contentHeight/1
 earthPony.x = 0
 
--- Function: MovePegasus
--- Input: this function accepts an event listener
--- Output: none
--- Description: This function
-local function MovePegasus(event)
-	-- add the scroll speed to the x value of the pegasus
-	pegasus.x = pegasus.x + scrollSpeed
-	-- make the pegasus spin
-	pegasus.x = pegasus.x + pegasus.y + 0.01
-end
+transition.to(pegasus, {x=2048, y=768, time=4000})
 
---MovePegasus will be called over and over again
-Runtime:addEventListener("enterFrame", MovePegasus)
+transition.to( unicorn, { rotation = unicorn.rotation-360, time=4000, onComplete=spinImage})
+ 
+transition.to(unicorn, {x=1024, y=384, time=4000})
 
--- Function: MovePegasus
--- Input: this function accepts an event listener
--- Output: none
--- Description: This function
-local function MovePegasus(event)
-	-- add the scroll speed to the x value of the pegasus
-	pegasus.x = pegasus.x + scrollSpeed
-	-- make the pegasus spin
-	pegasus.x = pegasus.x + pegasus.y + 0.01
-end
