@@ -232,23 +232,24 @@ NumericField:addEventListener( "userInput", NumericFieldListener )
 
 -- display text for correct answers
 amountCorrect = display.newText( "Correct = ".. numberOfCorrect, display.contentWidth/3.5, display.contentHeight/5, nil, 50)
-amountCorrect:setTextColor(30/255, 219/255, 188/255)
+amountCorrect:setTextColor(63/255, 222/255, 253/255)
 
 -- create the lives to display on the screen
-heart1 = display.newImageRect("Images/heart.png", 100, 100)
+heart1 = display.newImageRect("Images/heart.png", 150, 150)
 heart1.x = display.contentWidth * 7 / 8
 heart1.y = display.contentHeight * 1 / 7
 
-heart2 = display.newImageRect("Images/heart.png", 100, 100)
+heart2 = display.newImageRect("Images/heart.png", 150, 150)
 heart2.x = display.contentWidth * 6 / 8
 heart2.y = display.contentHeight * 1 / 7
 
-heart3 = display.newImageRect("Images/heart.png", 100, 100)
+heart3 = display.newImageRect("Images/heart.png", 150, 150)
 heart3.x = display.contentWidth * 5 / 8
 heart3.y = display.contentHeight * 1 / 7
 
 -- display the timer on the screen
 clockText = display.newText ("", display.contentWidth/3, display.contentHeight*1/3, nil, 75)
+clockText:setTextColor(60/255, 4/255, 144/255)
 
 ----------------------------------------------------------------------------------------
 -- FUNCTION CALLS
