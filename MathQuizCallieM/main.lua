@@ -32,8 +32,7 @@ local division1
 local division2
 local multiplication1
 local multiplication2
---local factorial1
---local factorial2
+local factorial1
 --local exponent1
 --local exponent2
 --local squareroot1
@@ -80,26 +79,30 @@ local function AskQuestion()
 	division2 = math.random(1, 100)
 	multiplication1 = math.random(1, 10)
 	multiplication2 = math.random(1, 10)
-	randomOperator = math.random(1, 4)
+	factorial1 = math.random(1, 100)
+	randomOperator = math.random(1, 5)
 
 	if ( randomOperator == 1) then
+
+
 		correctAnswer = addition1 + addition2
-	
+
 		-- create question in text object
 		questionObject.text = addition1 .. " + " .. addition2 .. " = "
 
 	elseif ( randomOperator == 2) then
 
 		correctAnswer = subtraction1 - subtraction2
-	
+		
 		-- create question in text object
-		questionObject.text = subtraction1 .. " - " .. subtraction2 .. " = "
+		questionObject.text = subtraction1  .. " - " .. subtraction2 .. " = "
+	
 
 	elseif (randomOperator == 3) then
 
 		correctAnswer = division1 / division2
 	
-		-- create question in text object
+		--create question in text object
 		questionObject.text = division1 .. " / " .. division2 .. " = "
 
 	elseif ( randomOperator == 4) then
@@ -107,6 +110,13 @@ local function AskQuestion()
 
 		-- create question in text object
 		questionObject.text = multiplication1 .. " * " .. multiplication2 .. " = "
+
+	elseif ( randomOperator == 5) then
+		correctAnswer = factorial1 "!"
+
+		questionObject.text = factorial1.. "!"
+
+
     end
 end
 
@@ -195,7 +205,17 @@ local function NumericFieldListener( event )
 			UpdateHearts()
 			secondsLeft = totalSeconds
 		end
-		event.target.text = ""
+	end
+end
+
+local function YouWin()
+
+	if (amountCorrect == 5) then
+
+		youWin = display.newImageRect("Images/youWin.png", display.contentWidth, display.contentHeight)
+		youWin.x = display.contentWidth * 1/2
+		youWin.y = display.contentHeight * 1/2
+		NumericField.isVisible = false
 	end
 end
 
@@ -214,12 +234,12 @@ questionObject = display.newText( "", display.contentWidth/2, display.contentHei
 questionObject:setTextColor(204/255, 153/255, 255/255)
 
 -- create the correct text and make it invisible
-correctObject = display.newText( "Correct!", display.contentWidth/2, display.contentHeight*2.5/3, nil, 75 )
+correctObject = display.newText( "You Got it right!", display.contentWidth/2, display.contentHeight*2.5/3, nil, 75 )
 correctObject:setTextColor(230/255, 51/255, 51/255)
 correctObject.isVisible = false
 
 -- create the incorrect text object make it invisible
-incorrectObject = display.newText( "Incorrect, the correct answer is ", display.contentWidth/2, display.contentHeight*2.5/3, nil, 75)
+incorrectObject = display.newText( "Incorrect, the correct answer is ", display.contentWidth/2, display.contentHeight*2.5/3, nil, 40)
 incorrectObject:setTextColor(51/255, 123/255, 230/255)
 incorrectObject.isVisible = false
 
@@ -264,5 +284,5 @@ UpdateHearts()
 -- Call the timer
 StartTimer()
 
-
+YouWin()
 
