@@ -95,15 +95,11 @@ local function AskQuestion()
 	elseif ( randomOperator == 2) then
 
 		
-		if (subtraction1 > subtraction2) then
-		
 		correctAnswer = subtraction1 - subtraction2
 		
 		-- create question in text object
 		questionObject.text = subtraction1  .. " - " .. subtraction2 .. " = "
 
-		elseif 
-			AskQuestion()
 	
 
 	elseif (randomOperator == 3) then
