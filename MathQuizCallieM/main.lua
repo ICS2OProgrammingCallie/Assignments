@@ -32,9 +32,9 @@ local division1
 local division2
 local multiplication1
 local multiplication2
-local factorial1
---local exponent1
---local exponent2
+--local factorial1
+local exponent1
+local exponent2
 --local squareroot1
 --local squareroot2
 
@@ -79,7 +79,9 @@ local function AskQuestion()
 	division2 = math.random(1, 100)
 	multiplication1 = math.random(1, 10)
 	multiplication2 = math.random(1, 10)
-	factorial1 = math.random(1, 100)
+	--factorial1 = math.random(1, 100)
+	exponent1 = math.random(1, 5)
+	exponent2 = math.random(1, 5)
 	randomOperator = math.random(1, 5)
 
 	if ( randomOperator == 1) then
@@ -92,10 +94,16 @@ local function AskQuestion()
 
 	elseif ( randomOperator == 2) then
 
+		
+		if (subtraction1 > subtraction2) then
+		
 		correctAnswer = subtraction1 - subtraction2
 		
 		-- create question in text object
 		questionObject.text = subtraction1  .. " - " .. subtraction2 .. " = "
+
+		elseif 
+			AskQuestion()
 	
 
 	elseif (randomOperator == 3) then
@@ -111,13 +119,18 @@ local function AskQuestion()
 		-- create question in text object
 		questionObject.text = multiplication1 .. " * " .. multiplication2 .. " = "
 
-	elseif ( randomOperator == 5) then
-		correctAnswer = factorial1 "!"
+	--elseif ( randomOperator == 5) then
+		--correctAnswer = factorial1 "!"
 
-		questionObject.text = factorial1.. "!"
+		--questionObject.text = factorial1.. "!"
 
+	elseif (randomOperator == 5) then
 
-    end
+		correctAnswer = exponent1 ^ exponent2
+
+		questionObject.text = exponent1 .. " ^ " .. exponent2 .. " = "
+	
+	end
 end
 
 local function UpdateHearts()
