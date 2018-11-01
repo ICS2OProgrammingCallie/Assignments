@@ -8,6 +8,11 @@
 -- hide the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
+youWin = display.newImageRect("Images/youWin.jpg", display.contentWidth, display.contentHeight)
+youWin.x = display.contentWidth * 1/2
+youWin.y = display.contentHeight * 1/2
+youWin.isVisible = false
+
 -- sets the background image
 local backgroundImage = display.newImageRect("Images/backgroundImage.jpg", 2048, 1536)
 ----------------------------------------------------------------------------------------
@@ -32,7 +37,7 @@ local division1
 local division2
 local multiplication1
 local multiplication2
-local factorial1
+--local factorial1
 --local exponent1
 --local exponent2
 --local squareroot1
@@ -58,12 +63,14 @@ local gameOver
 -- SOUNDS
 ----------------------------------------------------------------------------------------
 
-local correctSound = audio.loadSound( "Sounds/correctSound.mp3" )
+local correctSound = audio.loadSound( "Sounds/correctSound.WAV" )
 local correctSoundChannel
-local incorrectSound = audio.loadSound( "Sounds/wrongSound.mp3")
+local incorrectSound = audio.loadSound( "Sounds/wrongSound.WAV")
 local incorrectSoundChannel
-local gameOverSound= audio.loadSound( "Sounds/gameOverSound.WAV")
+local gameOverSound = audio.loadSound( "Sounds/gameOverSound.WAV")
 local gameOverSoundChannel
+local youWinSound = audio.loadSound( "Sounds/youWinSound.WAV")
+local youWinSoundChannel
 
 ----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -79,8 +86,8 @@ local function AskQuestion()
 	division2 = math.random(1, 100)
 	multiplication1 = math.random(1, 10)
 	multiplication2 = math.random(1, 10)
-	--exponent1 = math.random(1, 20)
-	---exponent2 = math.random(1, 20)
+	exponent1 = math.random(1, 20)
+	exponent2 = math.random(1, 20)
 	--factorial1 = math.random(1, 100)
 	randomOperator = math.random(1, 5)
 
@@ -89,29 +96,31 @@ local function AskQuestion()
 
 		correctAnswer = addition1 + addition2
 
-		-- create question in text object
+		--create question in text object
 		questionObject.text = addition1 .. " + " .. addition2 .. " = "
 
 	elseif ( randomOperator == 2) then
 
-		if ( subtraction1 < subtraction2 ) then
+		if ( subtraction1 > subtraction2 ) then
 
-		correctAnswer = subtraction2 - subtraction1
+			correctAnswer = subtraction1 - subtraction2
 		
-		-- create question in text object
-		questionObject.text = subtraction2  .. " - " .. subtraction1 .. " = "
+			--create question in text object
+			questionObject.text = subtraction1  .. " - " .. subtraction2 .. " = "
 
-		else 
+		else
 
-		correctAnswer = subtraction1 - subtraction2
-
-		questionObject.text = subtraction1  .. " - " .. subtraction2 .. " = "
+			correctAnswer = subtraction2 - subtraction1
+		
+			-- create question in text object
+			questionObject.text = subtraction2  .. " - " .. subtraction1 .. " = "
+			
 
 		end
 
-	
-
 	elseif (randomOperator == 3) then
+
+		division1 = division1 - (division1 % division2)
 
 		correctAnswer = division1 / division2
 	
@@ -119,6 +128,8 @@ local function AskQuestion()
 		questionObject.text = division1 .. " / " .. division2 .. " = "
 
 	elseif ( randomOperator == 4) then
+
+
 		correctAnswer = multiplication1 * multiplication2
 
 		-- create question in text object
@@ -129,13 +140,25 @@ local function AskQuestion()
 
 		--questionObject.text = factorial1.. "!"
 
-	--elseif (randomoperator == 5) then
+	elseif (randomoperator == 5) then
 
-		--correctAnswer = exponent1 ^ exponent2
+		correctAnswer = exponent1 ^ exponent2
 
-		--questionObject.text = exponent1 .. "^ ""
+		questionObject.text = exponent1 .. " ^ ".. " = "
     end
 end
+
+-- function for when the player gets five correct
+local function HideCorrect()
+	correctObject.isVisible = false
+	AskQuestion()
+end
+
+local function HideIncorrect()
+	incorrectObject.isVisible = false
+	AskQuestion()
+end
+
 
 local function UpdateHearts()
 
@@ -156,8 +179,9 @@ local function UpdateHearts()
 		gameOver = display.newImageRect("Images/gameOver.png", display.contentWidth, display.contentHeight)
 		gameOver.x = display.contentWidth * 1/2
 		gameOver.y = display.contentHeight * 1/2
-		NumericField.isVisible = false
+		numericField.isVisible = false
 		gameOverSoundChannel = audio.play(gameOverSound)
+		timer.cancel ( countDownTimer )
 
 	end
 
@@ -165,15 +189,7 @@ local function UpdateHearts()
 
 end
 
-local function HideCorrect()
-	correctObject.isVisible = false
-	AskQuestion()
-end
 
-local function HideIncorrect()
-	incorrectObject.isVisible = false
-	AskQuestion()
-end
 
 local function UpdateTime()
 
@@ -213,29 +229,41 @@ local function NumericFieldListener( event )
 			numberOfCorrect = numberOfCorrect + 1
 			amountCorrect.text = "Number Correct = ".. numberOfCorrect
 			secondsLeft = totalSeconds
+			
 
 		-- if the users answer and the incorrect answer are the same:
 		else
-			incorrectObject.isVisible = true
+			--incorrectObject.isVisible = true
 			incorrectSoundChannel = audio.play(incorrectSound)
 			timer.performWithDelay(2100, HideIncorrect)
 			UpdateHearts()
 			secondsLeft = totalSeconds
 			amountCorrect.text = "Number Correct = ".. numberOfCorrect
+			incorrectObject = display.newText( "Incorrect, the correct answer is ".. correctAnswer, display.contentWidth/2, display.contentHeight*2.5/3, nil, 40)
+			incorrectObject:setTextColor(27/255, 34/255, 243/255)
+		
 		end
 	end
 end
 
-local function YouWin()
-
+local function youWin()
 	if (amountCorrect == 5) then
-
-		youWin = display.newImageRect("Images/youWin.png", display.contentWidth, display.contentHeight)
-		youWin.x = display.contentWidth * 1/2
-		youWin.y = display.contentHeight * 1/2
-		NumericField.isVisible = false
+		-- cancel the timer
+		timer.cancel (countDownTimer)
+		-- hide numeric field
+		numericField.isVisible = false
+		-- display the you win image
+		youWin.isVisible = true
+		-- play a sound
+		youWinSoundChannel = audio.play(youWinSound)
+		backgroundImage.isVisible = false
+		heart1.isVisible = false
+		heart2.isVisible = false
+		heart3.isVisible = false
+		clockText.isVisible = false
 	end
 end
+
 
 -- function that calls the timer
 local function StartTimer()
@@ -253,24 +281,23 @@ questionObject:setTextColor(204/255, 153/255, 255/255)
 
 -- create the correct text and make it invisible
 correctObject = display.newText( "You Got it right!", display.contentWidth/2, display.contentHeight*2.5/3, nil, 75 )
-correctObject:setTextColor(230/255, 51/255, 51/255)
+correctObject:setTextColor(27/255, 34/255, 243/255)
 correctObject.isVisible = false
 
 -- create the incorrect text object make it invisible
-incorrectObject = display.newText( "Incorrect, the correct answer is ", display.contentWidth/2, display.contentHeight*2.5/3, nil, 40)
-incorrectObject:setTextColor(51/255, 123/255, 230/255)
-incorrectObject.isVisible = false
+--incorrectObject:setTextColor(51/255, 123/255, 230/255)
+--incorrectObject.isVisible = false
 
 -- Create numeric field
-NumericField = native.newTextField( display.contentWidth/2, display.contentHeight/1.5, 200, 80)
-NumericField.inputType = "display"
+numericField = native.newTextField( display.contentWidth/2, display.contentHeight/1.5, 200, 80)
+numericField.inputType = "number"
 
 -- add the event listener for the numeric field
-NumericField:addEventListener( "userInput", NumericFieldListener )
+numericField:addEventListener( "userInput", NumericFieldListener )
 
 -- display text for correct answers
-amountCorrect = display.newText( "Correct = ".. numberOfCorrect, display.contentWidth/3.5, display.contentHeight/5, nil, 50)
-amountCorrect:setTextColor(63/255, 222/255, 253/255)
+amountCorrect = display.newText( "Number correct = ".. numberOfCorrect, display.contentWidth/3.5, display.contentHeight/5, nil, 50)
+amountCorrect:setTextColor(186/255, 49/255, 49/255)
 
 -- create the lives to display on the screen
 heart1 = display.newImageRect("Images/heart.png", 150, 150)
@@ -284,6 +311,9 @@ heart2.y = display.contentHeight * 1 / 7
 heart3 = display.newImageRect("Images/heart.png", 150, 150)
 heart3.x = display.contentWidth * 5 / 8
 heart3.y = display.contentHeight * 1 / 7
+
+
+
 
 -- display the timer on the screen
 clockText = display.newText ("", display.contentWidth/3, display.contentHeight*1/3, nil, 75)
@@ -302,5 +332,4 @@ UpdateHearts()
 -- Call the timer
 StartTimer()
 
-YouWin()
 
