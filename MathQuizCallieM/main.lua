@@ -32,9 +32,9 @@ local division1
 local division2
 local multiplication1
 local multiplication2
---local factorial1
-local exponent1
-local exponent2
+local factorial1
+--local exponent1
+--local exponent2
 --local squareroot1
 --local squareroot2
 
@@ -79,9 +79,9 @@ local function AskQuestion()
 	division2 = math.random(1, 100)
 	multiplication1 = math.random(1, 10)
 	multiplication2 = math.random(1, 10)
+	--exponent1 = math.random(1, 20)
+	---exponent2 = math.random(1, 20)
 	--factorial1 = math.random(1, 100)
-	exponent1 = math.random(1, 5)
-	exponent2 = math.random(1, 5)
 	randomOperator = math.random(1, 5)
 
 	if ( randomOperator == 1) then
@@ -94,11 +94,20 @@ local function AskQuestion()
 
 	elseif ( randomOperator == 2) then
 
-		
-		correctAnswer = subtraction1 - subtraction2
+		if ( subtraction1 < subtraction2 ) then
+
+		correctAnswer = subtraction2 - subtraction1
 		
 		-- create question in text object
+		questionObject.text = subtraction2  .. " - " .. subtraction1 .. " = "
+
+		else 
+
+		correctAnswer = subtraction1 - subtraction2
+
 		questionObject.text = subtraction1  .. " - " .. subtraction2 .. " = "
+
+		end
 
 	
 
@@ -120,13 +129,12 @@ local function AskQuestion()
 
 		--questionObject.text = factorial1.. "!"
 
-	elseif (randomOperator == 5) then
+	--elseif (randomoperator == 5) then
 
-		correctAnswer = exponent1 ^ exponent2
+		--correctAnswer = exponent1 ^ exponent2
 
-		questionObject.text = exponent1 .. " ^ " .. exponent2 .. " = "
-	
-	end
+		--questionObject.text = exponent1 .. "^ ""
+    end
 end
 
 local function UpdateHearts()
@@ -213,6 +221,7 @@ local function NumericFieldListener( event )
 			timer.performWithDelay(2100, HideIncorrect)
 			UpdateHearts()
 			secondsLeft = totalSeconds
+			amountCorrect.text = "Number Correct = ".. numberOfCorrect
 		end
 	end
 end
