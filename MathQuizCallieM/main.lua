@@ -8,11 +8,6 @@
 -- hide the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
-youWin = display.newImageRect("Images/youWin.jpg", display.contentWidth, display.contentHeight)
-youWin.x = display.contentWidth * 1/2
-youWin.y = display.contentHeight * 1/2
-youWin.isVisible = false
-
 -- sets the background image
 local backgroundImage = display.newImageRect("Images/backgroundImage.jpg", 2048, 1536)
 ----------------------------------------------------------------------------------------
@@ -29,19 +24,27 @@ local correctAnswer
 local incorrectAnswer
 
 -- variables for math equations
+
+-- addition
 local addition1
 local addition2
+-- subtraction
 local subtraction1
 local subtraction2
+-- division
 local division1
 local division2
+local temp
+-- multiplication
 local multiplication1
 local multiplication2
---local factorial1
---local exponent1
---local exponent2
---local squareroot1
---local squareroot2
+-- exponents
+local exponent1
+local exponent2
+local exponentObject
+-- square roots
+local squareRoot1
+local sqrtObject
 
 -- variables for number of correct answers
 local numberOfCorrect = 0
@@ -59,18 +62,26 @@ local heart1
 local heart2
 local heart3
 local gameOver
+local youWin
 ----------------------------------------------------------------------------------------
 -- SOUNDS
 ----------------------------------------------------------------------------------------
-
+-- variables for correct sound
 local correctSound = audio.loadSound( "Sounds/correctSound.WAV" )
 local correctSoundChannel
+-- variables for incorrect sound
 local incorrectSound = audio.loadSound( "Sounds/wrongSound.WAV")
 local incorrectSoundChannel
+-- variables for game over sound
 local gameOverSound = audio.loadSound( "Sounds/gameOverSound.WAV")
 local gameOverSoundChannel
-local youWinSound = audio.loadSound( "Sounds/youWinSound.WAV")
-local youWinSoundChannel
+-- variables for the background music
+local bkgMusic = audio.loadSound( "Sounds/bkgMusic.WAV")
+local bkgMusicChannel
+
+-- play the background music
+bkgMusicChannel = audio.play(bkgMusic)
+
 
 ----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -78,22 +89,30 @@ local youWinSoundChannel
 
 local function AskQuestion()
 	-- generate 2 random numbers between a max. and a min. number
+	-- random numbers for addition
 	addition1 = math.random(1, 20)
 	addition2 = math.random(1, 20)
+	-- random numbers for subtraction
 	subtraction1 = math.random(1, 20)
 	subtraction2 = math.random(1, 20)
-	division1 = math.random(1, 100)
-	division2 = math.random(1, 100)
+	-- random numbers for division
+	division1 = math.random(1, 10)
+	division2 = math.random(1, 10)
+	-- random numbers for multiplication
 	multiplication1 = math.random(1, 10)
 	multiplication2 = math.random(1, 10)
-	exponent1 = math.random(1, 20)
-	exponent2 = math.random(1, 20)
-	--factorial1 = math.random(1, 100)
-	randomOperator = math.random(1, 5)
-
+	-- random numbers for exponents
+	exponent1 = math.random(1, 5)
+	exponent2 = math.random(1, 5)
+	-- random numbers for square roots
+	squareRoot1 = math.random(1, 100)
+	-- random numbers for random operator
+	randomOperator = math.random(1, 6)
+	
+	-- creating the operations
 	if ( randomOperator == 1) then
 
-
+		-- calculating the correct answer
 		correctAnswer = addition1 + addition2
 
 		--create question in text object
@@ -101,8 +120,10 @@ local function AskQuestion()
 
 	elseif ( randomOperator == 2) then
 
+		-- making sure the first number is the greater number
 		if ( subtraction1 > subtraction2 ) then
 
+			-- calculating the correct answer
 			correctAnswer = subtraction1 - subtraction2
 		
 			--create question in text object
@@ -110,6 +131,7 @@ local function AskQuestion()
 
 		else
 
+			-- calculating the correct answer
 			correctAnswer = subtraction2 - subtraction1
 		
 			-- create question in text object
@@ -120,40 +142,51 @@ local function AskQuestion()
 
 	elseif (randomOperator == 3) then
 
-		division1 = division1 - (division1 % division2)
+		-- making sure the division has no decimals
+		temp = division1 * division2
+		-- calculating the correct answer
+		correctAnswer = temp / division2
 
-		correctAnswer = division1 / division2
-	
-		--create question in text object
-		questionObject.text = division1 .. " / " .. division2 .. " = "
+		questionObject.text = temp .. " / ".. division2 .. " = "
+
 
 	elseif ( randomOperator == 4) then
 
-
+		-- calculating the correct answer
 		correctAnswer = multiplication1 * multiplication2
 
 		-- create question in text object
 		questionObject.text = multiplication1 .. " * " .. multiplication2 .. " = "
 
-	--elseif ( randomOperator == 5) then
-		--correctAnswer = factorial1 "!"
 
-		--questionObject.text = factorial1.. "!"
 
-	elseif (randomoperator == 5) then
+	elseif (randomOperator == 5) then
 
-		correctAnswer = exponent1 ^ exponent2
+		-- adding the exponent function
+		exponentObject = math.pow(exponent1, exponent2)
+		-- calculating the correct answer
+		correctAnswer = exponentObject
+		-- create question in text object
+		questionObject.text = exponent1.." ^ ".. exponent2 .. "="
 
-		questionObject.text = exponent1 .. " ^ ".. " = "
+	elseif (randomOperator == 6) then
+
+		-- adding the square root function
+		sqrtObject = math.sqrt(squareRoot1)
+		-- calculating the correct answer
+		correctAnswer = sqrtObject
+		-- create question in text object
+		questionObject.text = "Square root of " .. squareRoot1 .. " = "
+
     end
 end
 
--- function for when the player gets five correct
+-- hiding the correct object
 local function HideCorrect()
 	correctObject.isVisible = false
 	AskQuestion()
 end
-
+-- hiding the incorrect object
 local function HideIncorrect()
 	incorrectObject.isVisible = false
 	AskQuestion()
@@ -179,17 +212,19 @@ local function UpdateHearts()
 		gameOver = display.newImageRect("Images/gameOver.png", display.contentWidth, display.contentHeight)
 		gameOver.x = display.contentWidth * 1/2
 		gameOver.y = display.contentHeight * 1/2
-		numericField.isVisible = false
 		gameOverSoundChannel = audio.play(gameOverSound)
+		-- hiding the numeric field
+		numericField.isVisible = false
+		-- canceling the timer
 		timer.cancel ( countDownTimer )
+		-- stop the bkg music
+		audio.stop(bkgMusicChannel)
 
 	end
 
 	lives = lives -1
 
 end
-
-
 
 local function UpdateTime()
 
@@ -200,13 +235,19 @@ local function UpdateTime()
 	clockText.text = "Time: ".. secondsLeft  
 
 	if (secondsLeft == 0 ) then
-		-- reset the number of seconds left
+		-- updating lives
 		UpdateHearts()
+		-- play inccorect sound
 		incorrectSoundChannel = audio.play(incorrectSound)
+		-- reset the number of seconds left
 		secondsLeft = totalSeconds
+		-- asking new quetsion
 		AskQuestion()
 	end
 end
+
+
+
 
 local function NumericFieldListener( event )
 
@@ -224,43 +265,34 @@ local function NumericFieldListener( event )
 		-- if the users answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
 			correctObject.isVisible = true
+			-- play correct sound
 			correctSoundChannel = audio.play(correctSound)
-			timer.performWithDelay(2100, HideCorrect)
+			timer.performWithDelay(1000, HideCorrect)
+			audio.stop(bkgMusic)
+			timer.performWithDelay(1000, audio.play)
+		
+			-- updating the score
 			numberOfCorrect = numberOfCorrect + 1
 			amountCorrect.text = "Number Correct = ".. numberOfCorrect
+			-- updating time
 			secondsLeft = totalSeconds
-			
+			event.target.text = ""
 
+		
 		-- if the users answer and the incorrect answer are the same:
 		else
-			--incorrectObject.isVisible = true
+			-- playing incorrect sound
 			incorrectSoundChannel = audio.play(incorrectSound)
 			timer.performWithDelay(2100, HideIncorrect)
+			-- updating lives
 			UpdateHearts()
+			-- updating time
 			secondsLeft = totalSeconds
-			amountCorrect.text = "Number Correct = ".. numberOfCorrect
+			-- saying the correct answer
 			incorrectObject = display.newText( "Incorrect, the correct answer is ".. correctAnswer, display.contentWidth/2, display.contentHeight*2.5/3, nil, 40)
 			incorrectObject:setTextColor(27/255, 34/255, 243/255)
-		
+			event.target.text = ""
 		end
-	end
-end
-
-local function youWin()
-	if (amountCorrect == 5) then
-		-- cancel the timer
-		timer.cancel (countDownTimer)
-		-- hide numeric field
-		numericField.isVisible = false
-		-- display the you win image
-		youWin.isVisible = true
-		-- play a sound
-		youWinSoundChannel = audio.play(youWinSound)
-		backgroundImage.isVisible = false
-		heart1.isVisible = false
-		heart2.isVisible = false
-		heart3.isVisible = false
-		clockText.isVisible = false
 	end
 end
 
@@ -283,10 +315,6 @@ questionObject:setTextColor(204/255, 153/255, 255/255)
 correctObject = display.newText( "You Got it right!", display.contentWidth/2, display.contentHeight*2.5/3, nil, 75 )
 correctObject:setTextColor(27/255, 34/255, 243/255)
 correctObject.isVisible = false
-
--- create the incorrect text object make it invisible
---incorrectObject:setTextColor(51/255, 123/255, 230/255)
---incorrectObject.isVisible = false
 
 -- Create numeric field
 numericField = native.newTextField( display.contentWidth/2, display.contentHeight/1.5, 200, 80)
@@ -311,9 +339,6 @@ heart2.y = display.contentHeight * 1 / 7
 heart3 = display.newImageRect("Images/heart.png", 150, 150)
 heart3.x = display.contentWidth * 5 / 8
 heart3.y = display.contentHeight * 1 / 7
-
-
-
 
 -- display the timer on the screen
 clockText = display.newText ("", display.contentWidth/3, display.contentHeight*1/3, nil, 75)
