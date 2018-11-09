@@ -8,6 +8,8 @@
 -- hide the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
+-- set the background colour
+
 --
 local logo = display.newImageRect("Images/CompanyLogo.png", 0, 0)
 logo.width = display.contentWidth/2
