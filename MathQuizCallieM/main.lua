@@ -268,8 +268,6 @@ local function NumericFieldListener( event )
 			-- play correct sound
 			correctSoundChannel = audio.play(correctSound)
 			timer.performWithDelay(1000, HideCorrect)
-			audio.stop(bkgMusic)
-			timer.performWithDelay(1000, audio.play)
 		
 			-- updating the score
 			numberOfCorrect = numberOfCorrect + 1
