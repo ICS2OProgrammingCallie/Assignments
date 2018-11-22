@@ -9,7 +9,7 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 -- set the background colour
-display.setDefault("background", 86/255, 249/255, 113/255)
+background 
 
 -- display the logo
 local logo = display.newImageRect("Images/CompanyLogo.png", 500, 500)
