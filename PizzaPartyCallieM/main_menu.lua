@@ -38,6 +38,12 @@ local creditsButton
 local instructionsbutton
 
 -----------------------------------------------------------------------------------------
+-- SOUND VARIABLES
+-----------------------------------------------------------------------------------------
+local bkgMusic = audio.loadSound( "Sounds/bkgMusicMainMenu.mp3")
+local bkgMusicChannel
+
+-----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
@@ -92,10 +98,10 @@ function scene:create( event )
         {   
             -- Set its position on the screen relative to the screen size
             x = display.contentWidth/2,
-            y = display.contentHeight*7/8,
+            y = display.contentHeight*1/8,
 
-            width = 320,
-            height = 200,
+            width = 200,
+            height = 100,
             -- Insert the images here
             defaultFile = "Images/PlayButtonUnpressed.png",
             overFile = "Images/PlayButtonPressed.png",
@@ -112,9 +118,9 @@ function scene:create( event )
         {
             -- Set its position on the screen relative to the screen size
             x = display.contentWidth*6.7/8,
-            y = display.contentHeight*7/8,
-            width = 320,
-            height = 200,
+            y = display.contentHeight*1/8,
+            width = 200,
+            height = 100,
             -- Insert the images here
             defaultFile = "Images/CreditsButtonUnpressed.png",
             overFile = "Images/CreditsButtonPressed.png",
@@ -128,10 +134,10 @@ function scene:create( event )
         {
             -- Set its position on the screen relative to the screen size
             x = display.contentWidth*1.3/8,
-            y = display.contentHeight*7/8,
+            y = display.contentHeight*1/8,
             
-            width = 320,
-            height = 200,
+            width = 200,
+            height = 100,
             -- Insert the images here
             defaultFile = "Images/InstructionsButtonUnpressed.png",
             overFile = "Images/InstructionsButtonPressed.png",
@@ -170,12 +176,10 @@ function scene:show( event )
     if ( phase == "will" ) then
        
     -----------------------------------------------------------------------------------------
+    
+    bkgMusicChannel = audio.play(bkgMusic)
 
-    -- Called when the scene is now on screen.
-    -- Insert code here to make the scene come alive.
-    -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       
-        
 
     end
 
