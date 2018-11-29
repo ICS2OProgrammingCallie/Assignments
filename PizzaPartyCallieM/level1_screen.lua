@@ -37,7 +37,8 @@ local backButton
 -----------------------------------------------------------------------------------------
 local bkgMusic = audio.loadSound( "Sounds/bkgMusicLevel1.mp3")
 local bkgMusicChannel
-
+local clickSound = audio.loadSound( "Sounds/clickSound.wav")
+local clickSoundChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS 
 -----------------------------------------------------------------------------------------
@@ -45,6 +46,7 @@ local bkgMusicChannel
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
     composer.gotoScene( "main_menu", {effect = "zoomOutInFadeRotate", time = 500})
+    clickSoundChannel = audio.play(clickSound)
 end
 
 -----------------------------------------------------------------------------------------

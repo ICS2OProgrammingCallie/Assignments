@@ -30,12 +30,20 @@ local bkg_image
 local backButton
 
 -----------------------------------------------------------------------------------------
+-- SOUND VARIABLES
+-----------------------------------------------------------------------------------------
+
+local clickSound = audio.loadSound( "Sounds/clickSound.wav")
+local clickSoundChannel
+
+-----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
     composer.gotoScene( "main_menu", {effect = "zoomOutInFadeRotate", time = 500})
+    clickSoundChannel = audio.play(clickSound)
 end
 
 
