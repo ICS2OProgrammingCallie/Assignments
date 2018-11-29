@@ -1,9 +1,9 @@
 -----------------------------------------------------------------------------------------
---
--- level1_screen.lua
--- Created by: Your Name
--- Date: Month Day, Year
--- Description: This is the level 1 screen of the game.
+-- instructions_screen.lua
+-- Created by: Callie McWaters
+-- Special thanks to Wal Wal for helping in the design of this framework.
+-- Date: 11/29/2018
+-- Description: This is the instructions page, displaying a back button to the main menu.
 -----------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
@@ -17,35 +17,34 @@ local widget = require( "widget" )
 -----------------------------------------------------------------------------------------
 
 -- Naming Scene
-sceneName = "level1_screen"
-
------------------------------------------------------------------------------------------
+sceneName = "credits_screen"
 
 -- Creating Scene Object
-local scene = composer.newScene( sceneName )
+scene = composer.newScene( sceneName ) -- This function doesn't accept a string, only a variable containing a string
 
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
-
--- The local variables for this scene
 local bkg_image
 local backButton
 
 -----------------------------------------------------------------------------------------
 -- SOUND VARIABLES
 -----------------------------------------------------------------------------------------
-local bkgMusic = audio.loadSound( "Sounds/bkgMusicLevel1.mp3")
-local bkgMusicChannel
+
+local clickSound = audio.loadSound( "Sounds/clickSound.wav")
+local clickSoundChannel
 
 -----------------------------------------------------------------------------------------
--- LOCAL FUNCTIONS 
+-- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
     composer.gotoScene( "main_menu", {effect = "zoomOutInFadeRotate", time = 500})
+    clickSoundChannel = audio.play(clickSound)
 end
+
 
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
@@ -58,21 +57,23 @@ function scene:create( event )
     local sceneGroup = self.view
 
     -----------------------------------------------------------------------------------------
+    -- BACKGROUND AND DISPLAY OBJECTS
+    -----------------------------------------------------------------------------------------
 
-    -- Insert the background image
-    bkg_image = display.newImageRect("Images/level1_screen.png", display.contentWidth, display.contentHeight)
+    -- Insert the background image and set it to the center of the screen
+    bkg_image = display.newImageRect("Images/Instructions Screen.png", display.contentWidth, display.contentHeight)
     bkg_image.x = display.contentCenterX
     bkg_image.y = display.contentCenterY
     bkg_image.width = display.contentWidth
     bkg_image.height = display.contentHeight
 
+    -- Associating display objects with this scene 
+    sceneGroup:insert( bkg_image )
+
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
 
-        -- Insert background image into the scene group in order to ONLY be associated with this scene
-    sceneGroup:insert( bkg_image )    
-
-  -----------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
 
@@ -99,7 +100,6 @@ function scene:create( event )
     -- Associating Buttons with this scene
     sceneGroup:insert( backButton )
     
-
 end --function scene:create( event )
 
 -----------------------------------------------------------------------------------------
@@ -109,25 +109,25 @@ function scene:show( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
+
+    -----------------------------------------------------------------------------------------
+
     local phase = event.phase
 
     -----------------------------------------------------------------------------------------
 
     if ( phase == "will" ) then
-
-        
         -- Called when the scene is still off screen (but is about to come on screen).
+
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-        bkgMusicChannel = audio.play(bkgMusic)
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-
     end
 
-end --function scene:show( event )
+end -- function scene:show( event )
 
 -----------------------------------------------------------------------------------------
 
@@ -136,20 +136,25 @@ function scene:hide( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
+
+    -----------------------------------------------------------------------------------------
+
     local phase = event.phase
 
     -----------------------------------------------------------------------------------------
 
     if ( phase == "will" ) then
+        -- Called when the scene is on screen (but is about to go off screen).
+        -- Insert code here to "pause" the scene.
+        -- Example: stop timers, stop animation, stop audio, etc.
 
-        -- stop the background music
-        audio.pause(bkgMusic)
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-
+        -- Called immediately after scene goes off screen.
     end
-end 
+
+end --function scene:hide( event )
 
 -----------------------------------------------------------------------------------------
 
@@ -159,7 +164,15 @@ function scene:destroy( event )
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
-end 
+    -----------------------------------------------------------------------------------------
+
+
+    -- Called prior to the removal of scene's view ("sceneGroup").
+    -- Insert code here to clean up the scene.
+    -- Example: remove display objects, save state, etc.
+
+end --function scene:destroy( event )
+
 -----------------------------------------------------------------------------------------
 -- EVENT LISTENERS
 -----------------------------------------------------------------------------------------
@@ -173,3 +186,5 @@ scene:addEventListener( "destroy", scene )
 -----------------------------------------------------------------------------------------
 
 return scene
+
+

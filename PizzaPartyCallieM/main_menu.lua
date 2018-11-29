@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------
 --
 -- main_menu.lua
--- Created by: Your Name
--- Date: Month Day, Year
+-- Created by: Callie McWaters
+-- Date: 11/29/2018
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
 
@@ -36,13 +36,15 @@ local bkg_image
 local playButton
 local creditsButton
 local instructionsbutton
-
+local appName
+local muteButton
 -----------------------------------------------------------------------------------------
 -- SOUND VARIABLES
 -----------------------------------------------------------------------------------------
 local bkgMusic = audio.loadSound( "Sounds/bkgMusicMainMenu.mp3")
 local bkgMusicChannel
-
+local clickSound = audio.loadSound( "Sounds/clickSound.wav")
+local clickSoundChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -50,6 +52,7 @@ local bkgMusicChannel
 -- Creating Transition Function to Credits Page
 local function CreditsTransition( )       
     composer.gotoScene( "credits_screen", {effect = "zoomOutIn", time = 500})
+    clickSoundChannel = audio.play(clickSound)
 end 
 
 -----------------------------------------------------------------------------------------
@@ -57,9 +60,17 @@ end
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
     composer.gotoScene( "level1_screen", {effect = "fade", time = 1000})
+    clickSoundChannel = audio.play(clickSound)
 end    
 
--- INSERT LOCAL FUNCTION DEFINITION THAT GOES TO INSTRUCTIONS SCREEN 
+
+-- Creating Transition Function to Credits Page
+local function InstructionsTransition()
+    composer.gotoScene( "instructions_screen", {effect = "zoomOutIn", time = 500})
+    clickSoundChannel = audio.play(clickSound)
+end
+
+-- INSERT LOCAL FUNCTION DEFINITION THAT GOES TO INSTRU-CTIONS SCREEN 
 
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
@@ -89,6 +100,12 @@ function scene:create( event )
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
 
+    -- create the company name text
+    appName = display.newText( " Pizza Party! ", 530, 300, nil, 100 )
+
+    appName:setTextColor(147/255, 89/255, 55/255)
+
+    sceneGroup:insert(appName)
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------   
@@ -106,13 +123,10 @@ function scene:create( event )
             defaultFile = "Images/PlayButtonUnpressed.png",
             overFile = "Images/PlayButtonPressed.png",
 
-
             -- When the button is released, call the Level1 screen transition function
-            onRelease = Level1ScreenTransition          
+            onRelease = Level1ScreenTransition         
         } )
-
     -----------------------------------------------------------------------------------------
-
     -- Creating Credits Button
     creditsButton = widget.newButton( 
         {
@@ -143,7 +157,7 @@ function scene:create( event )
             overFile = "Images/InstructionsButtonPressed.png",
 
             -- When the button is released, call the Credits transition function
-            onRelease = CreditsTransition
+            onRelease = InstructionsTransition
         } ) 
     
     -----------------------------------------------------------------------------------------
@@ -177,10 +191,9 @@ function scene:show( event )
        
     -----------------------------------------------------------------------------------------
     
-    bkgMusicChannel = audio.play(bkgMusic)
-
     elseif ( phase == "did" ) then       
-
+        -- play bkg music
+        bkgMusicChannel = audio.play(bkgMusic)
     end
 
 end -- function scene:show( event )
@@ -203,11 +216,13 @@ function scene:hide( event )
         -- Called when the scene is on screen (but is about to go off screen).
         -- Insert code here to "pause" the scene.
         -- Example: stop timers, stop animation, stop audio, etc.
+        audio.pause(bkgMusic)
+     -----------------------------------------------------------------------------------------
 
-    -----------------------------------------------------------------------------------------
-
-    elseif ( phase == "did" ) then
+   elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+        -- stoping the bkg music
+
     end
 
 end -- function scene:hide( event )
